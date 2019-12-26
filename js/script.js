@@ -1,8 +1,18 @@
+// TODO
+// - Send req with Enter
+// - Error handling
+
 const urlButton = document.querySelector(".url-button");
 const input = document.querySelector(".url-input");
 const output = document.querySelector(".output");
 
 urlButton.addEventListener("click", shortenUrl);
+input.addEventListener("keyup", e => {
+  if (e.keyCode === 13) {
+    e.preventDefault();
+    urlButton.click();
+  }
+});
 
 function shortenUrl() {
   if (urlButton.innerHTML == "Shorten") {
@@ -26,7 +36,18 @@ function shortenUrl() {
             output.querySelector("span").innerHTML = `${res.data.longUrl}`;
             console.log(res);
           })
-          .catch(err => console.log(err));
+          .catch(err => {
+            console.log(err);
+            urlButton.innerHTML = "Error";
+            urlButton.style.backgroundColor = "#f44336";
+            urlButton.style.color = "#fff";
+            setTimeout(() => {
+              urlButton.innerHTML = "Shorten";
+              urlButton.style.backgroundColor = "#f1f1f1";
+              urlButton.style.color = "#000";
+              input.value = "";
+            }, 2000);
+          });
       }
     }
   } else if (urlButton.innerHTML == "Copy") {
